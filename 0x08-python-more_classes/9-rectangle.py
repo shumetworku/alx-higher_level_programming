@@ -1,84 +1,145 @@
 #!/usr/bin/python3
-"""9-rectangle, built for Holberton Python project .
+
+# 9-rectangle module
+"""
+This module contains a class Rectangle
+>>> Rectangle = __import__('9-rectangle').Rectangle
+>>> my_rectangle = Rectangle(2, 4)
+>>> print(type(my_rectangle))
+<class '9-rectangle.Rectangle'>
+>>> dict_result = my_rectangle.__dict__
+>>> print(dict(sorted(dict_result.items())))
+{'_Rectangle__height': 4, '_Rectangle__width': 2}
 """
 
 
 class Rectangle:
-    """Class for printing of dimensions of a rectangle.
-    """
+    """This is an class Rectangle with instance attribute heigth and width"""
+
     number_of_instances = 0
     print_symbol = '#'
 
     def __init__(self, width=0, height=0):
-        type(self).number_of_instances += 1
-        # attribute assigment here engages setters defined below
+        """
+        initializes height and width of the rectangle
+        upon creation of an instance using property
+        getters and setters
+        >>> my_rectangle = Rectangle(2, '4')
+        Traceback (most recent call last):
+            ...
+        TypeError: height must be an integer
+        >>> my_rectangle = Rectangle(0, 0)
+        >>> my_rectangle.width = 10
+        >>> my_rectangle.height = -3
+        Traceback (most recent call last):
+            ...
+        ValueError: height must be >= 0
+        """
         self.width = width
         self.height = height
+        type(self).number_of_instances += 1
 
     @property
-    def width(self):        
+    def width(self):
         return self.__width
 
     @width.setter
-    def width(self, value):
-        if type(value) is not int:
-            raise TypeError('width must be an integer')
-        elif value < 0:
-            raise ValueError('width must be >= 0')
-        self.__width = value
+    def width(self, width):
+        """
+        Property setter for the width
+        checks if the type for the width is an integer or < 0
+        if above conditions aren't met errors are raised
+        """
+        if type(width) is not int:
+            raise TypeError("width must be an integer")
+        if width < 0:
+            raise ValueError("width must be >= 0")
+        self.__width = width
 
     @property
     def height(self):
+        """Property getter for the height"""
         return self.__height
 
     @height.setter
-    def height(self, value):
-        if type(value) is not int:
-            raise TypeError('height must be an integer')
-        if value < 0:
-            raise ValueError('height must be >= 0')
-        self.__height = value
+    def height(self, height):
+        """
+        Property setter for the height
+        checks if the type for the height is an integer or < 0
+        if above conditions aren't met errors are raised
+        """
+        if type(height) is not int:
+            raise TypeError("height must be an integer")
+        if height < 0:
+            raise ValueError("height must be >= 0")
+        self.__height = height
 
     def area(self):
-        return self.__width * self.__height
+        """
+        The method area() returns the area of the rectangle
+        by taking the product of the width and height of the
+        rectangle instance
+        >>> my_rectangle = Rectangle(5, 8)
+        >>> my_rectangle.area()
+        40
+        """
+        return self.width * self.height
 
     def perimeter(self):
-        if self.__width is 0 or self.__height is 0:
+        """
+        The method perimeter() return the perimeter of the
+        rectangle by taking the sum of width and height of the
+        rectangle, then multiplying the result by 2
+        If the width or height of the rectangle is 0 the 0 is
+        returned
+        >>> my_rectangle = Rectangle(5, 8)
+        >>> my_rectangle.perimeter()
+        26
+        >>> my_rectangle.height = 0
+        >>> my_rectangle.perimeter()
+        0
+        """
+        if self.height == 0 or self.width == 0:
             return 0
-        else:
-            return (self.__width * 2) + (self.__height * 2)
-
-    def _draw_rectangle(self):
-        str = ""
-        for row in range(self.__height):
-            for col in range(self.__width):
-                str += "{}".format(self.print_symbol)
-            if self.__width != 0 and row < (self.__height - 1):
-                str += '\n'
-        return str
+        return 2 * (self.width + self.height)
 
     def __str__(self):
-        return self._draw_rectangle()
+        """
+        The method __str__() is used to return the representation (drawing)
+        of the rectangle instance using #
+        If the width or the height is 0 an empty string is returned
+        """
+        if self.width == 0 or self.height == 0:
+            return ""
+        shape_rep_array = []
+        for height in range(self.height):
+            shape_rep_array.append(type(self).print_symbol * self.width)
+            shape_rep_array.append("\n")
+        shape_rep_array.pop()
+        return "".join(shape_rep_array)
 
     def __repr__(self):
-        return "Rectangle({:d}, {:d})".format(self.__width, self.__height)
+        return "Rectangle({}, {})".format(self.width, self.height)
 
-    @classmethod
-    def __del__(cls):
-        cls.number_of_instances -= 1
-        print('Bye rectangle...')
+    def __del__(self):
+        type(self).number_of_instances -= 1
+        print("Bye rectangle...")
 
     @staticmethod
     def bigger_or_equal(rect_1, rect_2):
-        if not isinstance(rect_1, Rectangle):
-            raise TypeError('rect_1 must be an instance of Rectangle')
-        if not isinstance(rect_2, Rectangle):
-            raise TypeError('rect_2 must be an instance of Rectangle')
-        if rect_1.area() >= rect_2.area():
-            return rect_1
-        else:
+        if type(rect_1) is not Rectangle:
+            raise TypeError("rect_1 must be an instance of Rectangle")
+        if type(rect_2) is not Rectangle:
+            raise TypeError("rect_2 must be an instance of Rectangle")
+        if rect_2.area() > rect_1.area():
             return rect_2
+        return rect_1
 
     @classmethod
     def square(cls, size=0):
         return cls(size, size)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
