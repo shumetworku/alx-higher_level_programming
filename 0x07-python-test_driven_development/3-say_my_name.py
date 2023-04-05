@@ -2,6 +2,7 @@
 # 3-say_my_name.py
 """Defines a name-printing function."""
 
+
 def say_my_name(first_name, last_name=""):
     """Print a name.
 
