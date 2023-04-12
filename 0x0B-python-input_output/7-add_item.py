@@ -1,9 +1,19 @@
 #!/usr/bin/python3
+"""
+Module 7-add_item
+"""
 
 
-import json
+from sys import argv
 
+s = __import__('5-save_to_json_file').save_to_json_file
+m = __import__('6-load_from_json_file').load_from_json_file
 
-def save_to_json_file(my_obj, filename):
-    with open(filename, "w", encoding="UTF-8") as f:
-        json.dump(my_obj, f)
+try:
+    files_before = m('add_item.json')
+except FileNotFoundError:
+    files_before = []
+
+lists = files_before + argv[1:]
+
+s(lists, 'add_item.json')
